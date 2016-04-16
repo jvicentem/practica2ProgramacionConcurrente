@@ -22,14 +22,15 @@ public class FileAndFolderUtils {
 	public static void createFolder(String path) {
 		File folder = new File(path);
 		
-		if(folder.isDirectory()){
+		if (folder.isDirectory()) {
 			try {
 				FileUtils.forceDelete(folder);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			folder.mkdirs();
-		}		
+		}	
+		
+		folder.mkdirs();
 	}
 	
 	public static BufferedReader openFile(String filePath) throws FileNotFoundException {
@@ -92,7 +93,7 @@ public class FileAndFolderUtils {
 			 fos = null;
 			 
 			 for (String file : files) 
-				 deleteFileIfExists(file);
+				 deleteFileIfExists(folderPath + File.separator + file);
 			 
 		 } catch (Exception exception){
 			 exception.printStackTrace();
