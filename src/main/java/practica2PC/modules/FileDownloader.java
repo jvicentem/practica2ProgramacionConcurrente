@@ -37,7 +37,7 @@ public class FileDownloader {
 			CountDownLatch latch = new CountDownLatch(getMaxDownloads());
 			
 			for (int i = 0; i < fileParts; i++) {
-				threads.add(createDownloadThread(fileName, fileUrl, i, latch));
+				threads.add(createDownloadThread(fileName, fileUrl + LineParser.PART_STRING + i, i, latch));
 			}
 			
 			for (Thread th : threads) {
@@ -70,6 +70,8 @@ public class FileDownloader {
 									RealDownloader.downloadFile(url, getDestinationFolder());
 									
 									latch.countDown();
+									
+									System.out.println();
 								}
 						, fileName + "part" + part);
 	}
@@ -101,7 +103,7 @@ public class FileDownloader {
 				string = string + "------------------------------------------------------------ \n";
 			}
 		
-			return string;				
+			return string + "\n \n";				
 		}
 
 	}
