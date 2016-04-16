@@ -31,7 +31,7 @@ public class FileDownloader {
 			String fileUrl = (String) file.get(LineParser.URL_MAP_KEY);
 			int fileParts = (int) file.get(LineParser.PARTS_MAP_KEY);
 			
-			System.out.println("Descargando archivo "+fileName+". Por favor, espere...");
+			System.out.println("Descargando archivo "+fileName+", Por favor, espere...");
 			ArrayList<Thread> threads = new ArrayList<Thread>();
 			
 			CountDownLatch latch = new CountDownLatch(getMaxDownloads());
@@ -73,14 +73,14 @@ public class FileDownloader {
 									
 									System.out.println();
 								}
-						, fileName + "part" + part);
+						, fileName + " part " + part);
 	}
 	
 	private Thread createJoinPartsThread(String fileName) {
 		return new Thread(() -> {
 									FileAndFolderUtils.joinParts(fileName, getDestinationFolder());
 								}
-						 , "Joining " + fileName + "parts");
+						 , "Joining " + fileName + " parts");
 	}
 	
 	@Override
