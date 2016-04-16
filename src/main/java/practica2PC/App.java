@@ -1,3 +1,5 @@
+package practica2PC;
+
 import practica2PC.modules.Menu;
 
 public class App {

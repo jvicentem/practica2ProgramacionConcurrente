@@ -17,7 +17,13 @@ public class Menu {
 			
 			FileAndFolderUtils.createFolder(DOWNLOADS_DESTINATION_FOLDER);
 			
+			System.out.println(fileDownloader.toString());
+			
+			System.out.println("Descargando... Espere por favor... \n");
+			
 			fileDownloader.downloadFiles();
+			
+			System.out.println("\nDescargas finalizadas.");
 		} catch (FileNotFoundException e) {
 			System.out.println("Archivo de descargas no encontrado. Cerrando programa...");
 		} 

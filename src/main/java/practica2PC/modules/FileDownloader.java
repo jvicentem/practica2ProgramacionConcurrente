@@ -4,12 +4,11 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
+import practica2PC.modules.threads.DownloaderMonitor;
 import practica2PC.utils.FileAndFolderUtils;
 import practica2PC.utils.LineParser;
-import practica2PC.utils.RealDownloader;
 
 public class FileDownloader {
 	
@@ -31,13 +30,15 @@ public class FileDownloader {
 			String fileUrl = (String) file.get(LineParser.URL_MAP_KEY);
 			int fileParts = (int) file.get(LineParser.PARTS_MAP_KEY);
 			
-			System.out.println("Descargando archivo "+fileName+", Por favor, espere...");
-			ArrayList<Thread> threads = new ArrayList<Thread>();
+			System.out.println("Descargando archivo "+fileName+" ...");
 			
-			CountDownLatch latch = new CountDownLatch(getMaxDownloads());
+			ArrayList<Thread> threads = new ArrayList<Thread>();
+						
+			DownloaderMonitor monitor = new DownloaderMonitor();
 			
 			for (int i = 0; i < fileParts; i++) {
-				threads.add(createDownloadThread(fileName, fileUrl + LineParser.PART_STRING + i, i, latch));
+				String partUrl = generatePartUrl(fileUrl, fileName, i);
+				threads.add(createDownloadThread(fileName, partUrl, i, monitor));
 			}
 			
 			for (Thread th : threads) {
@@ -53,25 +54,19 @@ public class FileDownloader {
 				}
 			}
 			
-			threads.clear();
-			
 			createJoinPartsThread(fileName).start();
+			
+			threads.clear();
 		}
 	}
 	
-	private Thread createDownloadThread(String fileName, String url, int part, CountDownLatch latch) {
+	private Thread createDownloadThread(String fileName, String url, int part, DownloaderMonitor monitor) {
 		return new Thread(() -> {
 									try {
-										latch.await();
-									} catch (InterruptedException e) {
-										e.printStackTrace();									
+										monitor.downloadFile(getMaxDownloads(), fileName, url, part, getDestinationFolder());
+									} catch (Exception e) {
+										e.printStackTrace();
 									}
-									
-									RealDownloader.downloadFile(url, getDestinationFolder());
-									
-									latch.countDown();
-									
-									System.out.println();
 								}
 						, fileName + " part " + part);
 	}
@@ -88,24 +83,26 @@ public class FileDownloader {
 		if (getDownloadList().size() == 0) 
 			return "Ningún archivo para descargar";
 		else {
-			String string = getDownloadList().size() + " archivos a descargar. \n \n" 
-					+ "Archivo \n"
-					+ "======================================================== \n";
+			String string = "Cola de descargas - " + getDownloadList().size() + " archivos a descargar. \n"
+							+ "======================================================== \n";
 	
 			for (Map<String, Object> download : getDownloadList()) {
-				string = string + download.get(LineParser.NAME_MAP_KEY);
+				string = string + download.get(LineParser.NAME_MAP_KEY) + " \n";
 				
 				for (int i = 0; i < (int) download.get(LineParser.PARTS_MAP_KEY); i++) {
-					string = string + "| \n"
-									+ "--- " + download.get(LineParser.URL_MAP_KEY) + " \n";
+					string = string + "| \n" 
+									+ "--- " + generatePartUrl((String) download.get(LineParser.URL_MAP_KEY), (String) download.get(LineParser.NAME_MAP_KEY), i) + " \n";
 				}
 				
 				string = string + "------------------------------------------------------------ \n";
 			}
 		
-			return string + "\n \n";				
+			return string + "\n";				
 		}
-
+	}
+	
+	private String generatePartUrl(String url, String fileName, int part) {
+		return url + "/" + fileName + LineParser.PART_STRING + part;
 	}
 	
 	private int getMaxDownloads() {
