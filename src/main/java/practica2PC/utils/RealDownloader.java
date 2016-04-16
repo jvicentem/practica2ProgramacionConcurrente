@@ -9,8 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-public class FileDownloader {
-	private FileDownloader() {}
+public class RealDownloader {
+	private RealDownloader() {}
 	
 	public static void downloadFile(String url, String destinationFolder) {
 		URL website = null;
