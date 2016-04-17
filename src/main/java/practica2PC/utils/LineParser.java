@@ -1,5 +1,6 @@
 package practica2PC.utils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,13 +38,13 @@ public class LineParser {
 	public static Map<String, Object> lineAsMap(String line) {
 		String[] splittedLine = splitLine(line);
 		
-		Map<String, Object> lineMap = new HashMap<String, Object>();
+		Map<String, Object> lineMap = new HashMap<>();
 		
 		lineMap.put(NAME_MAP_KEY, getFileName(splittedLine));
 		lineMap.put(URL_MAP_KEY , getUrl(splittedLine));
 		lineMap.put(PARTS_MAP_KEY, getNumberOfParts(splittedLine));
 		
-		return lineMap;
+		return Collections.unmodifiableMap(lineMap);
 	}
 	
 }

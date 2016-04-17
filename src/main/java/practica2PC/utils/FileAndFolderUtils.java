@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
@@ -41,10 +42,9 @@ public class FileAndFolderUtils {
 		}
 	}
 	
-	public static ArrayList<String> readTextFile(String filePath) throws FileNotFoundException {
-		BufferedReader reader = null;
-		
-
+	public static List<String> readTextFile(String filePath) throws FileNotFoundException {
+		BufferedReader reader;
+	
 		reader = openFile(filePath);
 		
 		ArrayList<String> lines = new ArrayList<>();
@@ -80,17 +80,14 @@ public class FileAndFolderUtils {
 				 fis = new FileInputStream(f);
 				 fileBytes = new byte[(int) f.length()];
 				 bytesRead = fis.read(fileBytes, 0,(int) f.length());
-				 assert(bytesRead == fileBytes.length);
-				 assert(bytesRead == (int) f.length());
+				 assert bytesRead == fileBytes.length;
+				 assert bytesRead == (int) f.length();
 				 fos.write(fileBytes);
 				 fos.flush();
-				 fileBytes = null;
 				 fis.close();
-				 fis = null;
 			 }
 			 
 			 fos.close();
-			 fos = null;
 			 
 			 for (String file : files) 
 				 deleteFileIfExists(folderPath + File.separator + file);

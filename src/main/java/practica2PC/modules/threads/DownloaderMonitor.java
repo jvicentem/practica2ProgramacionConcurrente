@@ -6,9 +6,11 @@ import practica2PC.utils.LineParser;
 import practica2PC.utils.RealDownloader;
 
 public class DownloaderMonitor {
-	private int concurrentDownloads = 0;
+	private int concurrentDownloads;
 	
-	public DownloaderMonitor() {}
+	public DownloaderMonitor() {
+		this.concurrentDownloads = 0;
+	}
 	
 	public void downloadFile(int maxConcurrentDownloads, String fileName, String url, int part, String destinationFolder) throws InterruptedException {
 		increaseConcurrentDownloadsCount(maxConcurrentDownloads);

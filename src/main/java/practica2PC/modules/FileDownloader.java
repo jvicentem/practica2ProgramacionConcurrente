@@ -18,7 +18,7 @@ public class FileDownloader {
 	
 	public FileDownloader(int maxDownloads, String filePath, String destinationFolder) throws FileNotFoundException {
 		this.downloadList = FileAndFolderUtils.readTextFile(filePath)
-											  .stream().map(e -> (LineParser.lineAsMap(e)))
+											  .stream().map(e -> LineParser.lineAsMap(e))
 											  .collect(Collectors.toList());
 		this.maxDownloads = maxDownloads;
 		this.destinationFolder = destinationFolder;
@@ -32,7 +32,7 @@ public class FileDownloader {
 			
 			System.out.println("Descargando archivo "+fileName+" ...");
 			
-			ArrayList<Thread> threads = new ArrayList<Thread>();
+			ArrayList<Thread> threads = new ArrayList<>();
 						
 			DownloaderMonitor monitor = new DownloaderMonitor();
 			
@@ -72,15 +72,13 @@ public class FileDownloader {
 	}
 	
 	private Thread createJoinPartsThread(String fileName) {
-		return new Thread(() -> {
-									FileAndFolderUtils.joinParts(fileName, getDestinationFolder());
-								}
-						 , "Joining " + fileName + " parts");
+		return new Thread(() -> FileAndFolderUtils.joinParts(fileName, getDestinationFolder()) 
+						  , "Joining " + fileName + " parts");
 	}
 	
 	@Override
 	public String toString() {
-		if (getDownloadList().size() == 0) 
+		if (getDownloadList().isEmpty()) 
 			return "Ningún archivo para descargar";
 		else {
 			String string = "Cola de descargas - " + getDownloadList().size() + " archivos a descargar. \n"
@@ -101,7 +99,7 @@ public class FileDownloader {
 		}
 	}
 	
-	private String generatePartUrl(String url, String fileName, int part) {
+	private static String generatePartUrl(String url, String fileName, int part) {
 		return url + "/" + fileName + LineParser.PART_STRING + part;
 	}
 	
