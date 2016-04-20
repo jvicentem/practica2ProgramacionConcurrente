@@ -33,7 +33,7 @@ public class DownloaderMonitor {
 	
 	private synchronized void decreaseConcurrentDownloadsCount() {
 		setConcurrentDownloads(Math.decrementExact(getConcurrentDownloads()) );
-		notifyAll();
+		notify();
 	}
 
 	private int getConcurrentDownloads() {
