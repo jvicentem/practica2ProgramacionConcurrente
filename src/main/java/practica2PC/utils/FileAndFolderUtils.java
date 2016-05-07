@@ -14,8 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
-
 public class FileAndFolderUtils {
 	
 	private FileAndFolderUtils() {}
@@ -23,15 +21,9 @@ public class FileAndFolderUtils {
 	public static void createFolder(String path) {
 		File folder = new File(path);
 		
-		if (folder.isDirectory()) {
-			try {
-				FileUtils.forceDelete(folder);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if (!folder.isDirectory()) {
+			folder.mkdirs();
 		}	
-		
-		folder.mkdirs();
 	}
 	
 	public static BufferedReader openFile(String filePath) throws FileNotFoundException {
@@ -64,7 +56,7 @@ public class FileAndFolderUtils {
 	}
 	
 	public static void joinParts(String fileName, String folderPath) {
-		 File ofile = new File(folderPath + "/" + fileName);
+		 File ofile = new File(folderPath + File.separator + fileName);
 		 FileOutputStream fos;
 		 FileInputStream fis;
 		 byte[] fileBytes;
@@ -76,7 +68,7 @@ public class FileAndFolderUtils {
 			 fos = new FileOutputStream(ofile,true);
 			 
 			 for (String file : files) {
-				 File f = new File(folderPath + "/" + file);
+				 File f = new File(folderPath + File.separator + file);
 				 fis = new FileInputStream(f);
 				 fileBytes = new byte[(int) f.length()];
 				 bytesRead = fis.read(fileBytes, 0,(int) f.length());
