@@ -54,7 +54,7 @@ public class FileDownloader {
 				}
 			}
 			
-			createJoinPartsThread(fileName).start();
+			createMergeFilePartsThread(fileName).start();
 			
 			threads.clear();
 		}
@@ -71,9 +71,9 @@ public class FileDownloader {
 						, fileName + " part " + part);
 	}
 	
-	private Thread createJoinPartsThread(String fileName) {
-		return new Thread(() -> FileAndFolderUtils.joinParts(fileName, getDestinationFolder()) 
-						  , "Joining " + fileName + " parts");
+	private Thread createMergeFilePartsThread(String fileName) {
+		return new Thread(() -> FileAndFolderUtils.mergeFileParts(fileName, getDestinationFolder()) 
+						  , "Merging " + fileName + " parts");
 	}
 	
 	@Override

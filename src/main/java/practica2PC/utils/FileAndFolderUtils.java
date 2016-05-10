@@ -55,7 +55,7 @@ public class FileAndFolderUtils {
 		return lines;
 	}
 	
-	public static void joinParts(String fileName, String folderPath) {
+	public static void mergeFileParts(String fileName, String folderPath) {
 		 File ofile = new File(folderPath + File.separator + fileName);
 		 FileOutputStream fos;
 		 FileInputStream fis;
