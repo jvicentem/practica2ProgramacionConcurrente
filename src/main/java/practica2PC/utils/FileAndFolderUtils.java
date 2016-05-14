@@ -76,10 +76,13 @@ public class FileAndFolderUtils {
 				 assert bytesRead == (int) f.length();
 				 fos.write(fileBytes);
 				 fos.flush();
+				 fileBytes = null;
 				 fis.close();
+				 fis = null;
 			 }
 			 
 			 fos.close();
+			 fos = null;
 			 
 			 for (String file : files) 
 				 deleteFileIfExists(folderPath + File.separator + file);
