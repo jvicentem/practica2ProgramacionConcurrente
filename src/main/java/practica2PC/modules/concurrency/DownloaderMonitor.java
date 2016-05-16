@@ -1,4 +1,4 @@
-package practica2PC.modules.threads;
+package practica2PC.modules.concurrency;
 
 import java.io.File;
 
@@ -25,14 +25,14 @@ public class DownloaderMonitor {
 	}
 	
 	private synchronized void increaseConcurrentDownloadsCount(int maxConcurrentDownloads) throws InterruptedException {
-		if (maxConcurrentDownloadsReached(maxConcurrentDownloads)) 
-			while (maxConcurrentDownloadsReached(maxConcurrentDownloads)) 
-				wait();
-		setConcurrentDownloads(Math.incrementExact(getConcurrentDownloads()) );
+		while (maxConcurrentDownloadsReached(maxConcurrentDownloads)) 
+			wait();
+		
+		setConcurrentDownloads(Math.incrementExact(getConcurrentDownloads()));
 	}
 	
 	private synchronized void decreaseConcurrentDownloadsCount() {
-		setConcurrentDownloads(Math.decrementExact(getConcurrentDownloads()) );
+		setConcurrentDownloads(Math.decrementExact(getConcurrentDownloads()));
 		notify();
 	}
 

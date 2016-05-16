@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import practica2PC.modules.threads.DownloaderMonitor;
+import practica2PC.modules.concurrency.DownloaderMonitor;
 import practica2PC.utils.FileAndFolderUtils;
 import practica2PC.utils.LineParser;
 
