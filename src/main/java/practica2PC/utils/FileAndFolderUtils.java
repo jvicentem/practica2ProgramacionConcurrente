@@ -7,10 +7,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
-
-import org.apache.commons.io.FileUtils;
 
 public class FileAndFolderUtils {
 	
@@ -19,14 +21,9 @@ public class FileAndFolderUtils {
 	public static void createFolder(String path) {
 		File folder = new File(path);
 		
-		if(folder.isDirectory()){
-			try {
-				FileUtils.forceDelete(folder);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if (!folder.isDirectory()) {
 			folder.mkdirs();
-		}		
+		}	
 	}
 	
 	public static BufferedReader openFile(String filePath) throws FileNotFoundException {
@@ -37,8 +34,29 @@ public class FileAndFolderUtils {
 		}
 	}
 	
-	public static void joinParts(String fileName, int parts, String folderPath) {
-		 File ofile = new File(folderPath+"/"+fileName);
+	public static List<String> readTextFile(String filePath) throws FileNotFoundException {
+		BufferedReader reader;
+	
+		reader = openFile(filePath);
+		
+		ArrayList<String> lines = new ArrayList<>();
+		
+		String line = "";
+		
+		try {
+			while((line = reader.readLine()) != null) {
+				lines.add(line);
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	
+		return lines;
+	}
+	
+	public static void mergeFileParts(String fileName, String folderPath) {
+		 File ofile = new File(folderPath + File.separator + fileName);
 		 FileOutputStream fos;
 		 FileInputStream fis;
 		 byte[] fileBytes;
@@ -50,13 +68,12 @@ public class FileAndFolderUtils {
 			 fos = new FileOutputStream(ofile,true);
 			 
 			 for (String file : files) {
-				 File f = new File(folderPath+"/"+file);
-				 //System.out.println(f.getAbsolutePath());
+				 File f = new File(folderPath + File.separator + file);
 				 fis = new FileInputStream(f);
 				 fileBytes = new byte[(int) f.length()];
 				 bytesRead = fis.read(fileBytes, 0,(int) f.length());
-				 assert(bytesRead == fileBytes.length);
-				 assert(bytesRead == (int) f.length());
+				 assert bytesRead == fileBytes.length;
+				 assert bytesRead == (int) f.length();
 				 fos.write(fileBytes);
 				 fos.flush();
 				 fileBytes = null;
@@ -66,9 +83,21 @@ public class FileAndFolderUtils {
 			 
 			 fos.close();
 			 fos = null;
+			 
+			 for (String file : files) 
+				 deleteFileIfExists(folderPath + File.separator + file);
+			 
 		 } catch (Exception exception){
 			 exception.printStackTrace();
 		 }
+	}
+	
+	public static void deleteFileIfExists(String filePath) {
+		try {
+			Files.deleteIfExists(Paths.get(filePath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
