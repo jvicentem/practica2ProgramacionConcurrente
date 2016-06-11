@@ -11,10 +11,11 @@
     <tr>
       <td>
          url
-
+         <br>
          nombre_fichero
-
-         num_partes
+         <br>
+         num_partes        
+         <br>
       </td>
     </tr>
   </tbody>
