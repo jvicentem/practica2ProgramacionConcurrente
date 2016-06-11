@@ -45,7 +45,8 @@ donde  url  es  la  dirección  principal  donde  se  encuentra  el  fichero  di
  Ejemplo de fichero de descarga:
 
  https://dl.dropboxusercontent.com/u/1784661/download_list.txt
-
+ 
+Código 1: Reconstrucción de un fichero dividido en diferentes partes.
 ```java
 File ofile = new File(dir+"/"+fileStart); 
 FileOutputStream fos; 
@@ -54,7 +55,6 @@ byte[] fileBytes;
 int bytesRead = 0; 
 String[] files = new File(dir).list((path, name) -> Pattern.matches(fileStart+Pattern.quote(".")+"part.*", name)); 
 
-Código 1: Reconstrucción de	un fichero dividido en diferentes partes.
 try { 
 	fos = new FileOutputStream(ofile,true); 
 
